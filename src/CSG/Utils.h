@@ -8,6 +8,8 @@
 
 #include "cinder/app/App.h"
 
+using namespace std;
+
 namespace ciCSG
 {
 	

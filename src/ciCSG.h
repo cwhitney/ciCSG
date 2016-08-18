@@ -27,7 +27,7 @@ namespace ciCSG
 		}
 	}
 	
-	static vector<ciCSG::Polygon> meshToPolygons(ofMesh& m)
+	static vector<ciCSG::Polygon> meshToPolygons(ci::TriMesh& m)
 	{
 		vector<ciCSG::Polygon> polygons;
 		
