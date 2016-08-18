@@ -6,20 +6,21 @@
 
 #pragma once
 
+#include "cinder/Vector.h"
 #include <Utils.h>
 
-namespace ofxCSG
+namespace ciCSG
 {
-	class Vertex : public ofVec3f
+	class Vertex : public ci::vec3
 	{
 	public:
 		Vertex( float x=0, float y=0, float z=0) :
-		ofVec3f(x, y, z),
+		ci::vec3(x, y, z),
 		classification(UNDEFINED)
 		{}
 		
-		Vertex( ofVec3f v3 ) :
-		ofVec3f( v3 ),
+		Vertex( ci::vec3 v3 ) :
+		ci::vec3( v3 ),
 		classification(UNDEFINED)
 		{}
 		

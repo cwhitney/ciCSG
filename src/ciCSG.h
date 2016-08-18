@@ -1,17 +1,17 @@
 //
-//  ofxCSG.h
+//  ciCSG.h
 //
 //  Created by lars berg on 3/3/15.
 //
 
 #pragma once
 
+#include "cinder/app/App.h"
 #include <CSG/Polygon.h>
 
-
-namespace ofxCSG
+namespace ciCSG
 {
-	static void addPolygonsToMesh(ofMesh& m, vector<ofxCSG::Polygon>& polygons)
+	static void addPolygonsToMesh(ofMesh& m, vector<ciCSG::Polygon>& polygons)
 	{
 		for(auto& p: polygons)
 		{
@@ -27,9 +27,9 @@ namespace ofxCSG
 		}
 	}
 	
-	static vector<ofxCSG::Polygon> meshToPolygons(ofMesh& m)
+	static vector<ciCSG::Polygon> meshToPolygons(ofMesh& m)
 	{
-		vector<ofxCSG::Polygon> polygons;
+		vector<ciCSG::Polygon> polygons;
 		
 		auto indices = m.getIndices();
 		auto v = m.getVertices();
@@ -38,14 +38,14 @@ namespace ofxCSG
 		{
 			for(int i=0; i<indices.size(); i+=3)
 			{
-				polygons.push_back( ofxCSG::Polygon( v[ indices[i] ], v[ indices[i+1] ], v[ indices[i+2] ] ) );
+				polygons.push_back( ciCSG::Polygon( v[ indices[i] ], v[ indices[i+1] ], v[ indices[i+2] ] ) );
 			}
 		}
 		else
 		{
 			for(int i=0; i<v.size(); i+=3)
 			{
-				polygons.push_back( ofxCSG::Polygon( v[i], v[i+1], v[i+2] ) );
+				polygons.push_back( ciCSG::Polygon( v[i], v[i+1], v[i+2] ) );
 			}
 		}
 		
@@ -53,9 +53,9 @@ namespace ofxCSG
 		return polygons;
 	}
 	
-	static vector<ofPolyline> polygonsToPolylines( vector<Polygon>& polygons )
+	static std::vector<ofPolyline> polygonsToPolylines( std::vector<Polygon>& polygons )
 	{
-		vector<ofPolyline> polylines;
+		std::vector<ofPolyline> polylines;
 		for(auto& p: polygons)
 		{
 			auto pl = p.toPolylines();
@@ -119,11 +119,12 @@ namespace ofxCSG
 			pb.wasSplit = pb.triangles.size() > 1;
 		}
 		
-		ofLogVerbose( "ofxCSG::meshBoolean", "split time: " + ofToString((ofGetElapsedTimeMillis() - startTime)) );
+		ofLogVerbose( "ciCSG::meshBoolean", "split time: " + ofToString((ofGetElapsedTimeMillis() - startTime)) );
 		
 		//classy the triangles
-		startTime = ofGetElapsedTimeMillis();
-		ofVec3f rayDir(0,1,0);
+		auto startTime = ci::app::getElapsedSeconds();
+		ci::vec3 rayDir(0,1,0);
+
 		for(auto& p: polygonsA)
 		{
 			if(p.triangles.size() > 1)
@@ -147,16 +148,14 @@ namespace ofxCSG
 				p.setClassification( p.rayIntersectionCount % 2 ? BACK : FRONT );
 			}
 		}
-		ofLogVerbose( "ofxCSG::meshBoolean", "classify time: " + ofToString((ofGetElapsedTimeMillis() - startTime)) );
+		ofLogVerbose( "ciCSG::meshBoolean", "classify time: " + ofToString((ci::app::getElapsedSeconds() - startTime)) );
 		
 		//flip em
-		if(flipA)
-		{
+		if(flipA == true) {
 			for(auto& p: polygonsA)	p.flip();
 		}
 		
-		if(flipB)
-		{
+		if(flipB){
 			for(auto& p: polygonsB)	p.flip();
 		}
 		
@@ -165,7 +164,7 @@ namespace ofxCSG
 		m.clear();
 		addPolygonsToMesh( m, polygonsA );
 		addPolygonsToMesh( m, polygonsB );
-		ofLogVerbose( "ofxCSG::meshBoolean", "create mesh time: " + ofToString((ofGetElapsedTimeMillis() - startTime)) );
+		ofLogVerbose( "ciCSG::meshBoolean", "create mesh time: " + ofToString((ci::app::getElapsedSeconds() - startTime)) );
 	}
 	
 	static void meshUnion( ofMesh& a, ofMesh& b, ofMesh& outMesh )

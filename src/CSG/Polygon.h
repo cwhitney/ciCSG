@@ -6,29 +6,32 @@
 
 #pragma once
 
+#include <vector>
+#include "cinder\Vector.h"
+
 #include <Triangle.h>
 #include <BoundBox.h>
 
-namespace ofxCSG
+namespace ciCSG
 {
 	class Polygon
 	{
 	public:
 		Polygon();
 		
-		Polygon( ofVec3f a, ofVec3f b, ofVec3f c );
+		Polygon( ci::vec3 a, ci::vec3 b, ci::vec3 c );
 		
 		~Polygon();
 		
-		void addTriangle( ofVec3f a, ofVec3f b, ofVec3f c );
+		void addTriangle( ci::vec3 a, ci::vec3 b, ci::vec3 c );
 		
 		void addTriangle( Triangle t );
 		
-		void set( ofVec3f a, ofVec3f b, ofVec3f c );
+		void set( ci::vec3 a, ci::vec3 b, ci::vec3 c );
 		
 		void setClassification( Classification classification );
 		
-		ofVec3f getNormal();
+		ci::vec3 getNormal();
 		
 		float getW();
 		
@@ -36,28 +39,28 @@ namespace ofxCSG
 		
 		void flip();
 		
-		vector<ofPolyline> toPolylines();
+		std::vector<ofPolyline> toPolylines();
 		
 		void split( Triangle& t );
 		
 		void split( Polygon& p );
 		
-		void split( ofVec3f t0, ofVec3f t1, ofVec3f t2 );
+		void split( ci::vec3 t0, ci::vec3 t1, ci::vec3 t2 );
 		
-		bool intersectRay( ofVec3f rayOrigin, ofVec3f rayDir, float epsilon, ofVec3f* intersection = NULL );
+		bool intersectRay( ci::vec3 rayOrigin, ci::vec3 rayDir, float epsilon, ci::vec3* intersection = NULL );
 		
 		void classifyRay( Polygon& p, int& intersectionCount );
 		
-		void classify( vector<Polygon>& polygons );
+		void classify(std::vector<Polygon>& polygons );
 		
 		void draw(bool useNormalForColor = true);
 		
 		
 		//
-		vector<Triangle> triangles;
+		std::vector<Triangle> triangles;
 		BoundBox bb;
 		
-		vector< Polygon* > splitters;
+		std::vector< Polygon* > splitters;
 		
 		bool wasSplit;
 		

@@ -6,23 +6,27 @@
 
 #pragma once
 
-#include <LineSegment.h>
+#include "cinder/Vector.h"
+#include "cinder/gl/gl.h"
 
-namespace ofxCSG
+#include <LineSegment.h>
+#include <vector>
+
+namespace ciCSG
 {	
 	class Triangle
 	{
 	public:
-		Triangle(ofVec3f a, ofVec3f b, ofVec3f c);
+		Triangle(ci::vec3 a, ci::vec3 b, ci::vec3 c);
 		
 		Triangle();
 		~Triangle();
 		
-		ofVec3f* getPtr();
+		ci::vec3* getPtr();
 		
-		ofVec3f& operator[]( int n );
+		ci::vec3& operator[]( int n );
 		
-		void set( ofVec3f _a, ofVec3f _b, ofVec3f _c );
+		void set( ci::vec3 _a, ci::vec3 _b, ci::vec3 _c );
 		
 		void flip();
 		
@@ -32,45 +36,45 @@ namespace ofxCSG
 		
 		float getAreaSquared();
 		
-		bool rayIntersect( ofVec3f rayOrigin, ofVec3f rayDir );
+		bool rayIntersect( ci::vec3 rayOrigin, ci::vec3 rayDir );
 		
-		bool intersectRay( ofVec3f rayOrigin, ofVec3f rayDir, ofVec3f* intersection = NULL );
+		bool intersectRay( ci::vec3 rayOrigin, ci::vec3 rayDir, ci::vec3* intersection = NULL );
 
-		bool intersectRay( ofVec3f rayOrigin, ofVec3f rayDir, float epsilon, ofVec3f* intersection = NULL );
+		bool intersectRay( ci::vec3 rayOrigin, ci::vec3 rayDir, float epsilon, ci::vec3* intersection = NULL );
 		
-		ofVec3f getCenter();
+		ci::vec3 getCenter();
 		
 		void draw(bool useNormalForColor = true);
 		
 		ofPolyline toPolyline();
 		
-		Classification getClassification( ofVec3f planeNormal, float planeW );
+		Classification getClassification( ci::vec3 planeNormal, float planeW );
 		
-		void classifyWithPlane( ofVec3f planeNormal, float planeW );
+		void classifyWithPlane( ci::vec3 planeNormal, float planeW );
 		
-		vector<ofVec3f> intersectWithPlane( ofVec3f planeNormal, float planeW );
+		std::vector<ci::vec3> intersectWithPlane( ci::vec3 planeNormal, float planeW );
 		
 		bool getIntersection( Triangle t, LineSegment* overlap );
 		
-		vector<Triangle> insert( ofVec3f v );
+		std::vector<Triangle> insert( ci::vec3 v );
 
-		vector<Triangle> splitWithCoplanarSegment(ofVec3f a, ofVec3f b);
+		std::vector<Triangle> splitWithCoplanarSegment(ci::vec3 a, ci::vec3 b);
 		
-		vector<Triangle> splitWithCoplanarSegment(LineSegment segment);
+		std::vector<Triangle> splitWithCoplanarSegment(LineSegment segment);
 		
-		vector<Triangle> split( Triangle t );
+		std::vector<Triangle> split( Triangle t );
 		
-		vector<Triangle> meshToTriangles(ofMesh& m);
+		std::vector<Triangle> meshToTriangles(ofMesh& m);
 		
-		ofVec3f a, b, c, centroid;
-		ofVec3f normal;
+		ci::vec3 a, b, c, centroid;
+		ci::vec3 normal;
 		float w;
 		Classification classification;
 	};
 	
 	
 	//STATIC METHODS
-	static vector<Triangle> meshToTriangles(ofMesh& m)
+	static std::vector<Triangle> meshToTriangles(ofMesh& m)
 	{
 		vector<Triangle> triangles;
 		

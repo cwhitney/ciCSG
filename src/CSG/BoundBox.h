@@ -6,23 +6,28 @@
 
 #pragma once
 
-#include "ofMain.h"
+#include <vector>
+#include "cinder/Vector.h"
+#include "cinder/CinderMath.h"
 
-namespace ofxCSG
+namespace ciCSG
 {
 	class BoundBox
 	{
 	public:
+		bool initialized;
+		ci::vec3 minBound, maxBound;
+
 		BoundBox() :
 		initialized( false ),
-		minBound( ofVec3f() ),
-		maxBound( ofVec3f() )
+		minBound( ci::vec3() ),
+		maxBound( ci::vec3() )
 		{}
 		
 		~BoundBox()
 		{}
 		
-		void addPoint( ofVec3f p )
+		void addPoint( ci::vec3 p )
 		{
 			if(!initialized)
 			{
@@ -34,24 +39,24 @@ namespace ofxCSG
 			{
 				for(int i=0; i<3; i++)
 				{
-					minBound[i] = min( p[i], minBound[i] );
-					maxBound[i] = max( p[i], maxBound[i] );
+					minBound[i] = glm::min( p[i], minBound[i] );
+					maxBound[i] = glm::max( p[i], maxBound[i] );
 				}
 				
 				if(minBound.x > maxBound.x || minBound.y > maxBound.y || minBound.z > maxBound.z )
 				{
-					cout << "minBound: " << minBound << endl;
-					cout << "maxBound: " << maxBound << endl << endl;
+					std::cout << "minBound: " << minBound << std::endl;
+					std::cout << "maxBound: " << maxBound << std::endl << std::endl;
 				}
 			}
 		}
 		
-		void addPoints( vector<ofVec3f> points )
+		void addPoints( std::vector<ci::vec3> points )
 		{
 			for(auto& p: points)	addPoint( p );
 		}
 		
-		void addPoints( ofVec3f a, ofVec3f b, ofVec3f c )
+		void addPoints( ci::vec3 a, ci::vec3 b, ci::vec3 c )
 		{
 			addPoint( a );
 			addPoint( b );
@@ -81,7 +86,7 @@ namespace ofxCSG
 			return false;
 		}
 		
-		bool isPointInside( ofVec3f p )
+		bool isPointInside( ci::vec3 p )
 		{
 			return minBound.x <= p.x && p.x <= maxBound.x && minBound.y <= p.y && p.y <= maxBound.y && minBound.z <= p.z && p.z <= maxBound.z;
 //			if( minBound.x <= p.x && p.x <= maxBound.x )
@@ -117,7 +122,7 @@ namespace ofxCSG
 			return a.intersects( b );
 		}
 		
-		bool initialized;
-		ofVec3f minBound, maxBound;
+
+		
 	};
 }

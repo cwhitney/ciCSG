@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "ofMain.h"
+#include "cinder/app/App.h"
 
-namespace ofxCSG
+namespace ciCSG
 {
 	
 	//STATIC VARS
@@ -39,55 +39,65 @@ namespace ofxCSG
 		a.insert( a.end(), b.begin(), b.end() );
 	}
 	
-	static ofVec3f normalFromPoints(ofVec3f p0, ofVec3f p1, ofVec3f p2)
+	static ci::vec3 normalFromPoints(ci::vec3 p0, ci::vec3 p1, ci::vec3 p2)
 	{
-		return (p2 - p1).cross( p0 - p1).normalize();
+		//return (p2 - p1).cross(p0 - p1).normalize();
+		return glm::normalize(glm::cross(p2 - p1, p0 - p1));
 	}
 	
-	static float areaOfTriangle(ofVec3f p0, ofVec3f p1, ofVec3f p2)
+	static float areaOfTriangle(ci::vec3 p0, ci::vec3 p1, ci::vec3 p2)
 	{
-		return (p2 - p1).cross(p0 - p1).length() * .5;
+		//return (p2 - p1).cross(p0 - p1).length() * .5;
+		return glm::length(glm::cross(p2 - p1, p0 - p1)) * 0.5;
 	}
 	
-	static float areaOfTriangleSquared(ofVec3f p0, ofVec3f p1, ofVec3f p2)
+	static float areaOfTriangleSquared(ci::vec3 p0, ci::vec3 p1, ci::vec3 p2)
 	{
-		return (p2 - p1).cross(p0 - p1).lengthSquared() * .5;
+		//return (p2 - p1).cross(p0 - p1).lengthSquared() * .5;
+		return glm::length2(glm::cross(p2 - p1, p0 - p1)) * 0.5;
 	}
 
-	static float signedDistanceToPlane(ofVec3f point, ofVec3f planePos, ofVec3f planeNormal)
+	static float signedDistanceToPlane(ci::vec3 point, ci::vec3 planePos, ci::vec3 planeNormal)
 	{
-		float dist = planeNormal.dot(point - planePos);
+		//float dist = planeNormal.dot(point - planePos);
+		float dist = glm::dot(planeNormal, point - planePos);
 		return dist;
 	}
 	
 	//http://geomalgorithms.com/a04-_planes.html
-	static float distanceToPlane(ofVec3f point, ofVec3f planePos, ofVec3f planeNormal)
+	static float distanceToPlane(ci::vec3 point, ci::vec3 planePos, ci::vec3 planeNormal)
 	{
 		float sb, sn, sd;
 		
-		sn = -( planeNormal.dot(point - planePos) );
-		sd = planeNormal.dot(planeNormal);
+		//sn = -( planeNormal.dot(point - planePos) );
+		//sd = planeNormal.dot(planeNormal);
+		sn = -( glm::dot(planeNormal, point - planePos) );
+		sd = glm::dot(planeNormal, planeNormal);
+		
 		sb = sn / sd;
 		
-		ofVec3f B = point + sb * planeNormal;
+		ci::vec3 B = point + sb * planeNormal;
 		
-		return point.distance(B);
+		//return point.distance(B);
+		return distance(point, B);
 	}
 	
-	static float distanceToPlaneSigned(ofVec3f point, ofVec3f planePos, ofVec3f planeNormal)
+	static float distanceToPlaneSigned(ci::vec3 point, ci::vec3 planePos, ci::vec3 planeNormal)
 	{
 		//assumes planeNormal is a unit vector
-		return -( planeNormal.dot( point - planePos ) );
+		//return -(planeNormal.dot(point - planePos));
+		return -( glm::dot(planeNormal, point - planePos));
 		//	return -( doubleDot( planeNormal, point - planePos ) );
 	}
 	
-	static Classification classifyPointWithPlane( ofVec3f point, ofVec3f planeNormal, float w )
+	static Classification classifyPointWithPlane( ci::vec3 point, ci::vec3 planeNormal, float w )
 	{
-		float t = planeNormal.dot( point ) - w;
+		//float t = planeNormal.dot(point) - w;
+		float t = glm::dot(planeNormal,  point ) - w;
 		return ( t < NEG_EPSILON ) ? BACK : (t > EPSILON) ? FRONT : SPANNING;
 	}
 	
-	static Classification classifyPointWithPlane( ofVec3f point, ofVec3f planePos, ofVec3f planeNormal)
+	static Classification classifyPointWithPlane( ci::vec3 point, ci::vec3 planePos, ci::vec3 planeNormal)
 	{
 		auto d = distanceToPlaneSigned( point, planePos, planeNormal );
 		
@@ -99,19 +109,19 @@ namespace ofxCSG
 	
 	//barycentric coords
 	//http://www.blackpawn.com/texts/pointinpoly/
-	static bool getBaryCentricCoords(ofVec3f p, ofVec3f t0, ofVec3f t1, ofVec3f t2, float &u, float &v, float& w)
+	static bool getBaryCentricCoords(ci::vec3 p, ci::vec3 t0, ci::vec3 t1, ci::vec3 t2, float &u, float &v, float& w)
 	{
 		// Compute vectors
-		ofVec3f v0 = t2 - t0;
-		ofVec3f v1 = t1 - t0;
-		ofVec3f v2 = p - t0;
+		ci::vec3 v0 = t2 - t0;
+		ci::vec3 v1 = t1 - t0;
+		ci::vec3 v2 = p - t0;
 		
 		// Compute dot products
-		float dot00 = v0.dot( v0 );
-		float dot01 = v0.dot( v1 );
-		float dot02 = v0.dot( v2 );
-		float dot11 = v1.dot( v1 );
-		float dot12 = v1.dot( v2 );
+		float dot00 = glm::dot(v0, v0);// v0.dot(v0);
+		float dot01 = glm::dot(v0, v1);// v0.dot( v1 );
+		float dot02 = glm::dot(v0, v2);// v0.dot( v2 );
+		float dot11 = glm::dot(v1, v1);// v1.dot( v1 );
+		float dot12 = glm::dot(v1, v2);// v1.dot( v2 );
 		
 		float denom = (dot00 * dot11 - dot01 * dot01);
 		
@@ -131,17 +141,18 @@ namespace ofxCSG
 		return true;
 	}
 	
-	static bool getBaryCentricCoords(ofVec3f p, ofVec3f t0, ofVec3f t1, ofVec3f t2, float &u, float &v)
+	static bool getBaryCentricCoords(ci::vec3 p, ci::vec3 t0, ci::vec3 t1, ci::vec3 t2, float &u, float &v)
 	{
 		float w;
 		return getBaryCentricCoords(p, t0, t1, t2, u, v, w);
 	}
 	
-	static ofVec3f closestPointOnLineSegment(ofVec3f p, ofVec3f l0, ofVec3f l1)
+	static ci::vec3 closestPointOnLineSegment(ci::vec3 p, ci::vec3 l0, ci::vec3 l1)
 	{
-		ofVec3f diff = p - l0;
-		ofVec3f dir = l1 - l0;
-		float u = diff.dot( dir ) / dir.dot( dir );
+		ci::vec3 diff = p - l0;
+		ci::vec3 dir = l1 - l0;
+		//float u = diff.dot(dir) / dir.dot(dir);
+		float u = glm::dot(diff, dir) / glm::dot(dir, dir);
 		
 		if ( u < 0. )	return l0;
 		else if( u > 1. )	return l1;
@@ -151,9 +162,9 @@ namespace ofxCSG
 	
 	
 	//http://paulbourke.net/geometry/pointlineplane/lineline.c
-	static bool LineLineIntersect( ofVec3f p1,ofVec3f p2,ofVec3f p3,ofVec3f p4, ofVec3f *pa = NULL, ofVec3f *pb = NULL )
+	static bool LineLineIntersect( ci::vec3 p1,ci::vec3 p2,ci::vec3 p3,ci::vec3 p4, ci::vec3 *pa = NULL, ci::vec3 *pb = NULL )
 	{
-		ofVec3f p13, p43, p21;
+		ci::vec3 p13, p43, p21;
 		double d1343,d4321,d1321,d4343,d2121;
 		double numer,denom;
 		
@@ -182,38 +193,39 @@ namespace ofxCSG
 		
 		if( pa != NULL)
 		{
-			*pa = p1 + mua * p21;
+			*pa = p1 + ci::vec3(mua) * p21;
 		}
 		if( pb != NULL )
 		{
-			*pb = p3 + mub * p43;
+			*pb = p3 + ci::vec3(mub) * p43;
 		}
 		
 		return true;
 	}
 	
-	static float getLineSegmentUValue(ofVec3f l0, ofVec3f l1, ofVec3f p)
+	static float getLineSegmentUValue(ci::vec3 l0, ci::vec3 l1, ci::vec3 p)
 	{
-		ofVec3f diff = p - l0;
-		ofVec3f dir = l1 - l0;
+		ci::vec3 diff = p - l0;
+		ci::vec3 dir = l1 - l0;
 		
 		if(l0 == l1)
 		{
 			return 0;
 		}
 		
-		return diff.dot( dir ) / dir.dot( dir );
+		//return diff.dot(dir) / dir.dot(dir);
+		return glm::dot(diff, dir) / glm::dot(dir, dir);
 	}
 	
-	static bool isPointInLineSegment(ofVec3f l0, ofVec3f l1, ofVec3f p)
+	static bool isPointInLineSegment(ci::vec3 l0, ci::vec3 l1, ci::vec3 p)
 	{
 		float u = getLineSegmentUValue( l0, l1, p );
 		return  u >= NEG_EPSILON && u <= ONE_PLUS_EPSILON;
 	}
 	
-	static bool intersectLineSegments(ofVec3f a0, ofVec3f a1, ofVec3f b0, ofVec3f b1, ofVec3f* intersection=NULL)
+	static bool intersectLineSegments(ci::vec3 a0, ci::vec3 a1, ci::vec3 b0, ci::vec3 b1, ci::vec3* intersection=NULL)
 	{
-		ofVec3f p;
+		ci::vec3 p;
 		
 		LineLineIntersect(a0, a1, b0, b1, &p);
 		
@@ -226,16 +238,17 @@ namespace ofxCSG
 		return false;
 	}
 	
-	static bool splitLineSegmentWithPlane( ofVec3f l0, ofVec3f l1, ofVec3f planeNormal, float w, ofVec3f* intersection)
+	static bool splitLineSegmentWithPlane( ci::vec3 l0, ci::vec3 l1, ci::vec3 planeNormal, float w, ci::vec3* intersection)
 	{
 		auto c0 = classifyPointWithPlane( l0, planeNormal, w);
 		auto c1 = classifyPointWithPlane( l1, planeNormal, w);
 		
 		if( c0 != c1 )
 		{
-			float k = (w - planeNormal.dot(l0)) / planeNormal.dot( l1 - l0 );
+			//float k = (w - planeNormal.dot(l0)) / planeNormal.dot(l1 - l0);
+			float k = (w - glm::dot(planeNormal, l0)) / glm::dot(planeNormal, l1 - l0 );
 			
-			*intersection = lerp( l0, l1, CLAMP(k, 0, 1) ); // the clamp fixed some errors where k > 1
+			*intersection = lerp( l0, l1, ci::clamp(k, 0.f, 1.f) ); // the clamp fixed some errors where k > 1
 			
 			return true;
 		}
@@ -243,7 +256,7 @@ namespace ofxCSG
 		return false;
 	}
 	
-	static int intersectLineSegmentPlane(ofVec3f p0, ofVec3f p1, ofVec3f planePos, ofVec3f planeNormal, ofVec3f* intersection = NULL)
+	static int intersectLineSegmentPlane(ci::vec3 p0, ci::vec3 p1, ci::vec3 planePos, ci::vec3 planeNormal, ci::vec3* intersection = NULL)
 	{
 		auto d0 = distanceToPlaneSigned( p0, planePos, planeNormal );
 		auto d1 = distanceToPlaneSigned( p1, planePos, planeNormal );
@@ -274,7 +287,7 @@ namespace ofxCSG
 	}
 	
 	
-	static bool isPointInTriangle(ofVec3f p, ofVec3f a, ofVec3f b, ofVec3f c, ofVec3f normal )
+	static bool isPointInTriangle(ci::vec3 p, ci::vec3 a, ci::vec3 b, ci::vec3 c, ci::vec3 normal )
 	{
 		if( fabs( distanceToPlaneSigned( p, a, normal ) ) > EPSILON )	return false;
 		
@@ -288,13 +301,14 @@ namespace ofxCSG
 		return false;
 	}
 	
-	static bool isPointOnPlane( ofVec3f p, ofVec3f planeNormal, float w, float epsilon = EPSILON)
+	static bool isPointOnPlane( ci::vec3 p, ci::vec3 planeNormal, float w, float epsilon = EPSILON)
 	{
-		float t = planeNormal.dot(p) - w;
+		//float t = planeNormal.dot(p) - w;
+		float t = glm::dot(planeNormal, p) - w;
 		return abs(t) > epsilon;
 	}
 	
-	static bool isPointInTriangle(ofVec3f p, ofVec3f a, ofVec3f b, ofVec3f c, ofVec3f normal, float epsilon )
+	static bool isPointInTriangle(ci::vec3 p, ci::vec3 a, ci::vec3 b, ci::vec3 c, ci::vec3 normal, float epsilon )
 	{
 		float u, v, w;
 		
@@ -306,7 +320,7 @@ namespace ofxCSG
 		return false;
 	}
 	
-	static bool isPointInTriangle(ofVec3f p, ofVec3f a, ofVec3f b, ofVec3f c)
+	static bool isPointInTriangle(ci::vec3 p, ci::vec3 a, ci::vec3 b, ci::vec3 c)
 	{
 		return isPointInTriangle( p, a, b, c, normalFromPoints(a, b, c) );
 	}
@@ -315,18 +329,20 @@ namespace ofxCSG
 	//derived from Akira-Hayasaka's ofxRayTriangleIntersection
 	//	https://github.com/Akira-Hayasaka/ofxRayTriangleIntersection/blob/master/src/ofxRayTriangleIntersection.h
 	//	assume ray direction is normalized
-	static bool intersectRayTriangle(ofVec3f rayOrigin, ofVec3f rayDir, ofVec3f t0, ofVec3f t1, ofVec3f t2, ofVec3f* intersection=NULL)
+	static bool intersectRayTriangle(ci::vec3 rayOrigin, ci::vec3 rayDir, ci::vec3 t0, ci::vec3 t1, ci::vec3 t2, ci::vec3* intersection=NULL)
 	{
-		ofVec3f normal = (t2 - t1).cross( t0 - t1).normalize();
-		float vn = rayDir.dot(normal);
+		//ci::vec3 normal = (t2 - t1).cross(t0 - t1).normalize();
+		ci::vec3 normal = glm::normalize( glm::cross(t2 - t1,t0 - t1) );
+		float vn = glm::dot(rayDir, normal);
 		
-		ofVec3f diff = rayOrigin - t0;
-		float xpn = diff.dot(normal);
+		ci::vec3 diff = rayOrigin - t0;
+		//float xpn = diff.dot(normal);
+		float xpn = glm::dot(diff, normal);
 		float distance = -xpn / vn;
 		
 		if (distance < 0) return false; // behind ray origin. fail
 		
-		ofVec3f hitPos = rayDir * distance + rayOrigin;
+		ci::vec3 hitPos = rayDir * distance + rayOrigin;
 		
 		if(isPointInTriangle(hitPos, t0, t1, t2))
 		{

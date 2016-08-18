@@ -8,23 +8,23 @@
 
 #include <LineSegment.h>
 
+using namespace std;
 
-
-namespace ofxCSG
+namespace ciCSG
 {
-	LineSegment::LineSegment( ofVec3f a, ofVec3f b) :
+	LineSegment::LineSegment( ci::vec3 a, ci::vec3 b) :
 	a(a), b(b)
 	{}
 	
 	LineSegment::LineSegment()
 	{}
 	
-	void LineSegment::set( ofVec3f p0, ofVec3f p1 )
+	void LineSegment::set( ci::vec3 p0, ci::vec3 p1 )
 	{
 		a = p0, b = p1;
 	}
 	
-	void LineSegment::expandToPoint( ofVec3f p )
+	void LineSegment::expandToPoint( ci::vec3 p )
 	{
 		if(a == b)
 		{
@@ -39,7 +39,8 @@ namespace ofxCSG
 	
 	float LineSegment::lengthSquared()
 	{
-		return a.squareDistance( b );
+		//return a.squareDistance(b);
+		return glm::distance2(a, b);
 	}
 	
 	bool LineSegment::subtract( LineSegment segment )
@@ -47,7 +48,7 @@ namespace ofxCSG
 		return subtract( segment.a, segment.b );
 	}
 	
-	bool LineSegment::subtract( ofVec3f p0, ofVec3f p1 )
+	bool LineSegment::subtract( ci::vec3 p0, ci::vec3 p1 )
 	{
 		if(!isPointInLineSegment( a, b, p0 ) && !isPointInLineSegment( a, b, p1 ))
 		{
@@ -75,12 +76,12 @@ namespace ofxCSG
 		return true;
 	}
 	
-	bool LineSegment::trimToTriangle( ofVec3f ta, ofVec3f tb, ofVec3f tc)
+	bool LineSegment::trimToTriangle( ci::vec3 ta, ci::vec3 tb, ci::vec3 tc)
 	{
 		//get the intersections
-		vector<ofVec3f> intersections;
-		ofVec3f intersection;
-		ofVec3f normal = normalFromPoints( ta, tb, tc);
+		vector<ci::vec3> intersections;
+		ci::vec3 intersection;
+		ci::vec3 normal = normalFromPoints( ta, tb, tc);
 		
 		//if the points are inside let's keep them
 		if( isPointInTriangle( a, ta, tb, tc, normal, NEG_EPSILON ))
@@ -129,12 +130,12 @@ namespace ofxCSG
 		return false;
 	}
 	
-	ofVec3f* LineSegment::getPtr()
+	ci::vec3* LineSegment::getPtr()
 	{
 		return &a;
 	}
 	
-	ofVec3f& LineSegment::operator[]( int n )
+	ci::vec3& LineSegment::operator[]( int n )
 	{
 		return getPtr()[n];
 	}

@@ -6,33 +6,36 @@
 
 #pragma once
 
+#include <vector>
+
+#include "cinder/Vector.h"
 #include <Utils.h>
 
-namespace ofxCSG
+namespace ciCSG
 {
 	class LineSegment
 	{
 	public:
-		LineSegment( ofVec3f a, ofVec3f b);
+		LineSegment( ci::vec3 a, ci::vec3 b);
 		
 		LineSegment();
 		
-		void set( ofVec3f p0, ofVec3f p1 );
+		void set( ci::vec3 p0, ci::vec3 p1 );
 		
-		void expandToPoint( ofVec3f p );
+		void expandToPoint( ci::vec3 p );
 		
 		float lengthSquared();
 		
 		bool subtract( LineSegment segment );
 		
-		bool subtract( ofVec3f p0, ofVec3f p1 );
+		bool subtract( ci::vec3 p0, ci::vec3 p1 );
 		
-		bool trimToTriangle( ofVec3f ta, ofVec3f tb, ofVec3f tc);
+		bool trimToTriangle( ci::vec3 ta, ci::vec3 tb, ci::vec3 tc);
 		
-		ofVec3f* getPtr();
+		ci::vec3* getPtr();
 		
-		ofVec3f& operator[]( int n );
+		ci::vec3& operator[]( int n );
 		
-		ofVec3f a, b, normal;
+		ci::vec3 a, b, normal;
 	};
 }

@@ -8,16 +8,20 @@
 
 #include <Triangle.h>
 
-namespace ofxCSG
+using namespace ci;
+using namespace std;
+
+namespace ciCSG
 {
-	Triangle::Triangle(ofVec3f a, ofVec3f b, ofVec3f c) :
+	Triangle::Triangle(ci::vec3 a, ci::vec3 b, ci::vec3 c) :
 	a( a ),
 	b( b ),
 	c( c ),
-	centroid( (a+b+c) / 3 ),
+	centroid( (a+b+c) / vec3(3.0) ),
 	classification( UNDEFINED ),
 	normal( normalFromPoints(a, b, c) ),
-	w( normal.dot(a) )
+	//w(normal.dot(a))
+	w( glm::dot(normal, a) )
 	{}
 	
 	Triangle::Triangle() :
@@ -27,22 +31,22 @@ namespace ofxCSG
 	Triangle::~Triangle()
 	{}
 	
-	ofVec3f* Triangle::getPtr()
+	ci::vec3* Triangle::getPtr()
 	{
 		return &a;
 	}
 	
-	ofVec3f& Triangle::operator[]( int n )
+	ci::vec3& Triangle::operator[]( int n )
 	{
 		return getPtr()[n];
 	}
 	
-	void Triangle::set( ofVec3f _a, ofVec3f _b, ofVec3f _c )
+	void Triangle::set( ci::vec3 _a, ci::vec3 _b, ci::vec3 _c )
 	{
 		a = _a;
 		b = _b;
 		c = _c;
-		centroid = (a+b+c) / 3;
+		centroid = (a+b+c) / vec3(3.0);
 		calcNormal();
 	}
 	
@@ -59,7 +63,8 @@ namespace ofxCSG
 	void Triangle::calcNormal()
 	{
 		normal = normalFromPoints( a, b, c );
-		w = normal.dot( a );
+		//w = normal.dot(a);
+		w = glm::dot(normal, a);
 	}
 	
 	float Triangle::getArea()
@@ -75,17 +80,18 @@ namespace ofxCSG
 	//derived from Akira-Hayasaka's ofxRayTriangleIntersection
 	//	https://github.com/Akira-Hayasaka/ofxRayTriangleIntersection/blob/master/src/ofxRayTriangleIntersection.h
 	//	assume ray direction is normalized
-	bool Triangle::intersectRay( ofVec3f rayOrigin, ofVec3f rayDir, ofVec3f* intersection )
+	bool Triangle::intersectRay( ci::vec3 rayOrigin, ci::vec3 rayDir, ci::vec3* intersection )
 	{
-		float vn = rayDir.dot(normal);
+		//float vn = rayDir.dot(normal);
+		float vn = glm::dot(rayDir, normal);
 		
-		ofVec3f diff = rayOrigin - a;
-		float xpn = diff.dot( normal );
+		ci::vec3 diff = rayOrigin - a;
+		float xpn = glm::dot(diff, normal);
 		float distance = -xpn / vn;
 		
 		if (distance < NEG_EPSILON) return false; // behind ray origin. fail
 		
-		ofVec3f hitPos = rayDir * distance + rayOrigin;
+		ci::vec3 hitPos = rayDir * distance + rayOrigin;
 		
 		if( isPointInTriangle( hitPos, a, b, c, normal ) )
 		{
@@ -101,19 +107,19 @@ namespace ofxCSG
 		return false;
 	}
 	
-	bool Triangle::rayIntersect( ofVec3f rayOrigin, ofVec3f rayDir )
+	bool Triangle::rayIntersect( ci::vec3 rayOrigin, ci::vec3 rayDir )
 	{
-		ofVec3f diff, edge1, edge2, norm;
+		ci::vec3 diff, edge1, edge2, norm;
 		
 		bool backfaceCulling = true;
 		
 		edge1 = b-a;
 		edge2 = c-a;
-		norm = edge1.cross( edge2 );
+		norm = glm::cross(edge1, edge2);
 		
 		float sign = 1;
 		
-		float DdN = rayDir.dot( normal );
+		float DdN = glm::dot(rayDir, normal);
 		if ( DdN > 0 )
 		{
 			//			if ( backfaceCulling ) return false;
@@ -130,7 +136,7 @@ namespace ofxCSG
 		}
 		
 		diff = rayOrigin - a;
-		auto DdQxE2 = sign * rayDir.dot( diff.cross( edge2 ) );
+		auto DdQxE2 = sign * glm::dot(rayDir, glm::cross(diff, edge2));
 		
 		// b1 < 0, no intersection
 		if ( DdQxE2 < 0 )
@@ -138,7 +144,7 @@ namespace ofxCSG
 			return false;
 		}
 		
-		auto DdE1xQ = sign * rayDir.dot( edge1.cross( diff ) );
+		auto DdE1xQ = sign * glm::dot(rayDir, glm::cross(edge1, diff ) );
 		
 		// b2 < 0, no intersection
 		if ( DdE1xQ < 0 )
@@ -153,7 +159,7 @@ namespace ofxCSG
 		}
 		
 		// Line intersects triangle, check if ray does.
-		auto QdN = - sign * diff.dot( normal );
+		auto QdN = -sign * glm::dot(diff, normal);
 		
 		// t < 0, no intersection
 		if ( QdN < 0 )
@@ -170,17 +176,17 @@ namespace ofxCSG
 	//derived from Akira-Hayasaka's ofxRayTriangleIntersection
 	//	https://github.com/Akira-Hayasaka/ofxRayTriangleIntersection/blob/master/src/ofxRayTriangleIntersection.h
 	//	assume ray direction is normalized
-	bool Triangle::intersectRay( ofVec3f rayOrigin, ofVec3f rayDir, float epsilon, ofVec3f* intersection )
+	bool Triangle::intersectRay( ci::vec3 rayOrigin, ci::vec3 rayDir, float epsilon, ci::vec3* intersection )
 	{
-		float vn = rayDir.dot(normal);
+		float vn = glm::dot(rayDir, normal);
 		
-		ofVec3f diff = rayOrigin - a;
-		float xpn = diff.dot( normal );
+		ci::vec3 diff = rayOrigin - a;
+		float xpn = glm::dot(diff, normal);
 		float distance = -xpn / vn;
 		
 		if (distance < NEG_EPSILON) return false; // behind ray origin. fail
 		
-		ofVec3f hitPos = rayDir * distance + rayOrigin;
+		ci::vec3 hitPos = rayDir * distance + rayOrigin;
 		
 		if( isPointInTriangle( hitPos, a, b, c, normal, epsilon ) )
 		{
@@ -196,7 +202,7 @@ namespace ofxCSG
 		return false;
 	}
 	
-	ofVec3f Triangle::getCenter()
+	ci::vec3 Triangle::getCenter()
 	{
 		return centroid;//(a + b + c) / 3.;
 	}
@@ -208,8 +214,8 @@ namespace ofxCSG
 			return;
 		}
 		
-		if(useNormalForColor)	ofSetColor( ofFloatColor(normal.x * .5 + .5, normal.y * .5 + .5, normal.z * .5 + .5) );
-		ofDrawTriangle( a, b, c );
+		//if(useNormalForColor)	gl::color( ci::Color(normal.x * .5 + .5, normal.y * .5 + .5, normal.z * .5 + .5) );
+		//ofDrawTriangle( a, b, c );
 	}
 	
 	ofPolyline Triangle::toPolyline()
@@ -221,7 +227,7 @@ namespace ofxCSG
 		return p;
 	}
 	
-	Classification Triangle::getClassification( ofVec3f planeNormal, float planeW )
+	Classification Triangle::getClassification( ci::vec3 planeNormal, float planeW )
 	{
 		int frontCount = 0, backCount = 0;
 		Classification classyFries;
@@ -238,16 +244,16 @@ namespace ofxCSG
 		else return COPLANAR;
 	}
 	
-	void Triangle::classifyWithPlane( ofVec3f planeNormal, float planeW )
+	void Triangle::classifyWithPlane( ci::vec3 planeNormal, float planeW )
 	{
 		classification = getClassification( planeNormal, planeW );
 	}
 	
-	vector<ofVec3f> Triangle::intersectWithPlane( ofVec3f planeNormal, float planeW )
+	vector<ci::vec3> Triangle::intersectWithPlane( ci::vec3 planeNormal, float planeW )
 	{
-		vector<ofVec3f> intersections;
+		vector<ci::vec3> intersections;
 		
-		ofVec3f intersection;
+		ci::vec3 intersection;
 		
 		for(int i=0, j=1; i<3; i++, j++)
 		{
@@ -294,7 +300,7 @@ namespace ofxCSG
 		return false;
 	}
 	
-	vector<Triangle> Triangle::insert( ofVec3f v )
+	vector<Triangle> Triangle::insert( ci::vec3 v )
 	{
 		vector<Triangle> triangles;
 		
@@ -318,7 +324,7 @@ namespace ofxCSG
 		return triangles;
 	}
 	
-	vector<Triangle> Triangle::splitWithCoplanarSegment(ofVec3f a, ofVec3f b)
+	vector<Triangle> Triangle::splitWithCoplanarSegment(ci::vec3 a, ci::vec3 b)
 	{
 		return splitWithCoplanarSegment( LineSegment(a, b) );
 	}

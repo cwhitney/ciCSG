@@ -8,13 +8,16 @@
 
 #include <Polygon.h>
 
-namespace ofxCSG
+using namespace ci;
+using namespace std;
+
+namespace ciCSG
 {
 	Polygon::Polygon() :
 	rayIntersectionCount( 0 )
 	{}
 	
-	Polygon::Polygon( ofVec3f a, ofVec3f b, ofVec3f c ) :
+	Polygon::Polygon( ci::vec3 a, ci::vec3 b, ci::vec3 c ) :
 	rayIntersectionCount( 0 )
 	{
 		addTriangle(a, b, c);
@@ -23,7 +26,7 @@ namespace ofxCSG
 	Polygon::~Polygon()
 	{}
 	
-	void Polygon::addTriangle( ofVec3f a, ofVec3f b, ofVec3f c )
+	void Polygon::addTriangle( ci::vec3 a, ci::vec3 b, ci::vec3 c )
 	{
 		bb.addPoints( a, b, c );
 		triangles.push_back( Triangle( a, b, c ) );
@@ -35,7 +38,7 @@ namespace ofxCSG
 		triangles.push_back( t );
 	}
 	
-	void Polygon::set( ofVec3f a, ofVec3f b, ofVec3f c )
+	void Polygon::set( ci::vec3 a, ci::vec3 b, ci::vec3 c )
 	{
 		clear();
 		addTriangle( Triangle( a, b, c ) );
@@ -49,7 +52,7 @@ namespace ofxCSG
 		}
 	}
 	
-	ofVec3f Polygon::getNormal()
+	ci::vec3 Polygon::getNormal()
 	{
 		return triangles[0].normal;
 	}
@@ -119,14 +122,14 @@ namespace ofxCSG
 		//}
 	}
 	
-	void Polygon::split( ofVec3f t0, ofVec3f t1, ofVec3f t2 )
+	void Polygon::split( ci::vec3 t0, ci::vec3 t1, ci::vec3 t2 )
 	{
 		Polygon p( t0, t1, t2 );
 		
 		split( p );
 	}
 	
-	bool Polygon::intersectRay( ofVec3f rayOrigin, ofVec3f rayDir, float epsilon, ofVec3f* intersection )
+	bool Polygon::intersectRay( ci::vec3 rayOrigin, ci::vec3 rayDir, float epsilon, ci::vec3* intersection )
 	{
 		for(auto& t: triangles)
 		{
@@ -141,10 +144,10 @@ namespace ofxCSG
 	
 	void Polygon::classifyRay( Polygon& p, int& intersectionCount )
 	{
-		ofVec3f rayDir = getNormal();
+		ci::vec3 rayDir = getNormal();
 		for(auto& t: triangles)
 		{
-			ofVec3f rayOrigin = t.getCenter();
+			ci::vec3 rayOrigin = t.getCenter();
 			
 			if( p.intersectRay( rayOrigin, rayDir, EPSILON, NULL ) )
 			{
@@ -155,10 +158,10 @@ namespace ofxCSG
 	
 	void Polygon::classify( vector<Polygon>& polygons )
 	{
-		ofVec3f rayDir = getNormal();
+		ci::vec3 rayDir = getNormal();
 		for(auto& t: triangles)
 		{	
-			ofVec3f rayOrigin = t.getCenter();
+			ci::vec3 rayOrigin = t.getCenter();
 			
 			int intersectionCount = 0;
 			
