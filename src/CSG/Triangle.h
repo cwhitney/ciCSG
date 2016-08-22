@@ -8,6 +8,8 @@
 
 #include "cinder/Vector.h"
 #include "cinder/gl/gl.h"
+#include "cinder/PolyLine.h"
+#include "cinder/TriMesh.h"
 
 #include <LineSegment.h>
 #include <vector>
@@ -46,7 +48,7 @@ namespace ciCSG
 		
 		void draw(bool useNormalForColor = true);
 		
-		ofPolyline toPolyline();
+		ci::PolyLine3f toPolyline();
 		
 		Classification getClassification( ci::vec3 planeNormal, float planeW );
 		
@@ -64,7 +66,7 @@ namespace ciCSG
 		
 		std::vector<Triangle> split( Triangle t );
 		
-		std::vector<Triangle> meshToTriangles(ofMesh& m);
+		std::vector<Triangle> meshToTriangles(ci::TriMesh& m);
 		
 		ci::vec3 a, b, c, centroid;
 		ci::vec3 normal;
@@ -74,12 +76,13 @@ namespace ciCSG
 	
 	
 	//STATIC METHODS
-	static std::vector<Triangle> meshToTriangles(ofMesh& m)
+	static std::vector<Triangle> meshToTriangles(ci::TriMesh& m)
 	{
 		vector<Triangle> triangles;
 		
 		auto indices = m.getIndices();
-		auto v = m.getVertices();
+		auto v = m.getPositions<3>();
+		size_t numPos = m.getNumVertices();
 		
 		if(indices.size())
 		{
@@ -90,7 +93,7 @@ namespace ciCSG
 		}
 		else
 		{
-			for(int i=0; i<v.size(); i+=3)
+			for(int i=0; i<numPos; i+=3)
 			{
 				triangles.push_back( Triangle( v[i], v[i+1], v[i+2] ) );
 			}

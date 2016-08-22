@@ -22,6 +22,9 @@
     <Filter Include="Blocks\ciCSG\src">
       <UniqueIdentifier>{d6d6d7ee-63c2-4f06-99bc-5292ee6b24dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Blocks\ciCSG\src\CSG">
+      <UniqueIdentifier>{29d80410-5b78-427d-bbf4-1b84fa70a99a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BasicSampleApp.cpp">
@@ -33,10 +36,43 @@
     <ClInclude Include="..\include\Resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\..\src\CSG\BoundBox.cpp">
+      <Filter>Blocks\ciCSG\src\CSG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\CSG\LineSegment.cpp">
+      <Filter>Blocks\ciCSG\src\CSG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\CSG\Polygon.cpp">
+      <Filter>Blocks\ciCSG\src\CSG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\CSG\Triangle.cpp">
+      <Filter>Blocks\ciCSG\src\CSG</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\CSG\Vertex.h">
+      <Filter>Blocks\ciCSG\src\CSG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\CSG\BoundBox.h">
+      <Filter>Blocks\ciCSG\src\CSG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\CSG\LineSegment.h">
+      <Filter>Blocks\ciCSG\src\CSG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\CSG\Polygon.h">
+      <Filter>Blocks\ciCSG\src\CSG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\CSG\Triangle.h">
+      <Filter>Blocks\ciCSG\src\CSG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\CSG\Utils.h">
+      <Filter>Blocks\ciCSG\src\CSG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ciCSG.h">
+      <Filter>Blocks\ciCSG\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

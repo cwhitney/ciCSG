@@ -50,13 +50,13 @@ namespace ciCSG
 	static float areaOfTriangle(ci::vec3 p0, ci::vec3 p1, ci::vec3 p2)
 	{
 		//return (p2 - p1).cross(p0 - p1).length() * .5;
-		return glm::length(glm::cross(p2 - p1, p0 - p1)) * 0.5;
+		return glm::length(glm::cross(p2 - p1, p0 - p1)) * 0.5f;
 	}
 	
 	static float areaOfTriangleSquared(ci::vec3 p0, ci::vec3 p1, ci::vec3 p2)
 	{
 		//return (p2 - p1).cross(p0 - p1).lengthSquared() * .5;
-		return glm::length2(glm::cross(p2 - p1, p0 - p1)) * 0.5;
+		return glm::length2(glm::cross(p2 - p1, p0 - p1)) * 0.5f;
 	}
 
 	static float signedDistanceToPlane(ci::vec3 point, ci::vec3 planePos, ci::vec3 planeNormal)
@@ -81,7 +81,7 @@ namespace ciCSG
 		ci::vec3 B = point + sb * planeNormal;
 		
 		//return point.distance(B);
-		return distance(point, B);
+		return glm::distance(point, B);
 	}
 	
 	static float distanceToPlaneSigned(ci::vec3 point, ci::vec3 planePos, ci::vec3 planeNormal)

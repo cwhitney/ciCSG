@@ -67,7 +67,7 @@ namespace ciCSG
 		
 		if(uP1 == uP0)
 		{
-			cout << "SHIT!" << p0 << ", " << p1 << endl << endl;
+			cout << "LineSegment :: SHIT!" << p0 << ", " << p1 << endl << endl;
 		}
 		
 		a = uP0 > 0 ? p0 : a;

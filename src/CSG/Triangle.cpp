@@ -218,10 +218,15 @@ namespace ciCSG
 		//ofDrawTriangle( a, b, c );
 	}
 	
-	ofPolyline Triangle::toPolyline()
+	PolyLine3f Triangle::toPolyline()
 	{
-		ofPolyline p;
-		p.addVertices( getPtr(), 3);
+		PolyLine3f p;
+		//p.addVertices( getPtr(), 3);
+
+		// TODO: make sure this properly pulls 3 verts in, and not xyz compontents of a single vec3
+		p.push_back( getPtr()[0] );
+		p.push_back( getPtr()[1] );
+		p.push_back( getPtr()[2] );
 		p.setClosed(true);
 		
 		return p;
@@ -405,13 +410,15 @@ namespace ciCSG
 		return triangles;
 	}
 	
-	vector<Triangle> Triangle::meshToTriangles(ofMesh& m)
+	vector<Triangle> Triangle::meshToTriangles(TriMesh& m)
 	{
 		vector<Triangle> triangles;
-		
+
 		auto indices = m.getIndices();
-		auto v = m.getVertices();
-		
+		//auto v = m.getVertices();
+		auto v = m.getPositions<3>();
+		size_t numPos = m.getNumVertices();
+
 		if(indices.size())
 		{
 			for(int i=0; i<indices.size(); i+=3)
@@ -421,7 +428,7 @@ namespace ciCSG
 		}
 		else
 		{
-			for(int i=0; i<v.size(); i+=3)
+			for(int i=0; i<numPos; i+=3)
 			{
 				triangles.push_back( Triangle( v[i], v[i+1], v[i+2] ) );
 			}

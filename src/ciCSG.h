@@ -7,11 +7,14 @@
 #pragma once
 
 #include "cinder/app/App.h"
+#include "cinder/Log.h"
+#include "cinder/PolyLine.h"
+
 #include <CSG/Polygon.h>
 
 namespace ciCSG
 {
-	static void addPolygonsToMesh(ofMesh& m, vector<ciCSG::Polygon>& polygons)
+	static void addPolygonsToMesh(ci::TriMesh& m, vector<ciCSG::Polygon>& polygons)
 	{
 		for(auto& p: polygons)
 		{
@@ -19,9 +22,12 @@ namespace ciCSG
 			{
 				if(t.classification == FRONT)
 				{
-					m.addVertex( t.a );
-					m.addVertex( t.b );
-					m.addVertex( t.c );
+					//m.addVertex( t.a );
+					//m.addVertex( t.b );
+					//m.addVertex( t.c );
+					m.appendPosition(t.a);
+					m.appendPosition(t.b);
+					m.appendPosition(t.c);
 				}
 			}
 		}
@@ -32,7 +38,9 @@ namespace ciCSG
 		vector<ciCSG::Polygon> polygons;
 		
 		auto indices = m.getIndices();
-		auto v = m.getVertices();
+		//auto v = m.getVertices();
+		auto v = m.getPositions<3>();
+		size_t numPos = m.getNumVertices();
 		
 		if(indices.size())
 		{
@@ -43,7 +51,7 @@ namespace ciCSG
 		}
 		else
 		{
-			for(int i=0; i<v.size(); i+=3)
+			for(int i=0; i<numPos; i+=3)
 			{
 				polygons.push_back( ciCSG::Polygon( v[i], v[i+1], v[i+2] ) );
 			}
@@ -53,9 +61,9 @@ namespace ciCSG
 		return polygons;
 	}
 	
-	static std::vector<ofPolyline> polygonsToPolylines( std::vector<Polygon>& polygons )
+	static std::vector<ci::PolyLine3f> polygonsToPolylines( std::vector<Polygon>& polygons )
 	{
-		std::vector<ofPolyline> polylines;
+		std::vector<ci::PolyLine3f> polylines;
 		for(auto& p: polygons)
 		{
 			auto pl = p.toPolylines();
@@ -67,7 +75,7 @@ namespace ciCSG
 	}
 	
 	
-	static void meshBoolean( ofMesh& a, ofMesh& b, ofMesh& m, bool flipA, bool flipB)
+	static void meshBoolean( ci::TriMesh& a, ci::TriMesh& b, ci::TriMesh& m, bool flipA, bool flipB)
 	{
 		
 		// get our polygons
@@ -77,7 +85,7 @@ namespace ciCSG
 		auto orig_polygonsA = polygonsA;
 		auto orig_polygonsB = polygonsB;
 		
-		auto startTime = ofGetElapsedTimeMillis();
+		auto startTime = ci::app::getElapsedSeconds();
 		
 		//split the polygons with eachother
 		int rayIntersectionCount = 0;
@@ -119,10 +127,10 @@ namespace ciCSG
 			pb.wasSplit = pb.triangles.size() > 1;
 		}
 		
-		ofLogVerbose( "ciCSG::meshBoolean", "split time: " + ofToString((ofGetElapsedTimeMillis() - startTime)) );
+		CI_LOG_I( "ciCSG::meshBoolean", "split time: " + to_string((getElapsedSeconds() - startTime)) );
 		
 		//classy the triangles
-		auto startTime = ci::app::getElapsedSeconds();
+		startTime = ci::app::getElapsedSeconds();
 		ci::vec3 rayDir(0,1,0);
 
 		for(auto& p: polygonsA)
@@ -148,7 +156,7 @@ namespace ciCSG
 				p.setClassification( p.rayIntersectionCount % 2 ? BACK : FRONT );
 			}
 		}
-		ofLogVerbose( "ciCSG::meshBoolean", "classify time: " + ofToString((ci::app::getElapsedSeconds() - startTime)) );
+		CI_LOG_I( "ciCSG::meshBoolean", "classify time: " + to_string((ci::app::getElapsedSeconds() - startTime)) );
 		
 		//flip em
 		if(flipA == true) {
@@ -159,25 +167,25 @@ namespace ciCSG
 			for(auto& p: polygonsB)	p.flip();
 		}
 		
-		startTime = ofGetElapsedTimeMillis();
+		startTime = ci::app::getElapsedSeconds();
 		//add the polygons to out outMesh
 		m.clear();
 		addPolygonsToMesh( m, polygonsA );
 		addPolygonsToMesh( m, polygonsB );
-		ofLogVerbose( "ciCSG::meshBoolean", "create mesh time: " + ofToString((ci::app::getElapsedSeconds() - startTime)) );
+		CI_LOG_I( "ciCSG::meshBoolean", "create mesh time: " + to_string((ci::app::getElapsedSeconds() - startTime)) );
 	}
 	
-	static void meshUnion( ofMesh& a, ofMesh& b, ofMesh& outMesh )
+	static void meshUnion( ci::TriMesh& a, ci::TriMesh& b, ci::TriMesh& outMesh )
 	{
 		meshBoolean( a, b, outMesh, false, false );
 	}
 	
-	static void meshIntersection( ofMesh& a, ofMesh& b, ofMesh& outMesh )
+	static void meshIntersection(ci::TriMesh& a, ci::TriMesh& b, ci::TriMesh& outMesh )
 	{
 		meshBoolean( a, b, outMesh, true, true );
 	}
 	
-	static void meshDifference( ofMesh& a, ofMesh& b, ofMesh& outMesh )
+	static void meshDifference(ci::TriMesh& a, ci::TriMesh& b, ci::TriMesh& outMesh )
 	{
 		meshBoolean( a, b, outMesh, false, true );
 	}

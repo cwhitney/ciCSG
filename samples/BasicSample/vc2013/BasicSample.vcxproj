@@ -191,9 +191,20 @@
   <ItemGroup />
   <ItemGroup />
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\CSG\BoundBox.cpp" />
+    <ClCompile Include="..\..\..\src\CSG\LineSegment.cpp" />
+    <ClCompile Include="..\..\..\src\CSG\Polygon.cpp" />
+    <ClCompile Include="..\..\..\src\CSG\Triangle.cpp" />
     <ClCompile Include="..\src\BasicSampleApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\ciCSG.h" />
+    <ClInclude Include="..\..\..\src\CSG\BoundBox.h" />
+    <ClInclude Include="..\..\..\src\CSG\LineSegment.h" />
+    <ClInclude Include="..\..\..\src\CSG\Polygon.h" />
+    <ClInclude Include="..\..\..\src\CSG\Triangle.h" />
+    <ClInclude Include="..\..\..\src\CSG\Utils.h" />
+    <ClInclude Include="..\..\..\src\CSG\Vertex.h" />
     <ClInclude Include="..\include\Resources.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

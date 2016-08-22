@@ -7,7 +7,8 @@
 #pragma once
 
 #include <vector>
-#include "cinder\Vector.h"
+#include "cinder/Vector.h"
+#include "cinder/PolyLine.h"
 
 #include <Triangle.h>
 #include <BoundBox.h>
@@ -39,7 +40,7 @@ namespace ciCSG
 		
 		void flip();
 		
-		std::vector<ofPolyline> toPolylines();
+		std::vector<ci::PolyLine3f> toPolylines();
 		
 		void split( Triangle& t );
 		

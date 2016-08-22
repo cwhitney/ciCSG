@@ -73,17 +73,21 @@ namespace ciCSG
 		for(auto& t: triangles)	t.flip();
 	}
 	
-	vector<ofPolyline> Polygon::toPolylines()
+	vector<PolyLine3f> Polygon::toPolylines()
 	{
-		vector<ofPolyline> polylines;
+		vector<PolyLine3f> polylines;
 		
 		for(auto& t: triangles)
 		{
-			ofPolyline p;
+			PolyLine3f p;
+			/*
 			p.addVertex( t.a );
 			p.addVertex( t.b );
 			p.addVertex( t.c );
-			
+			*/
+			p.push_back(t.a);
+			p.push_back(t.b);
+			p.push_back(t.c);
 			p.setClosed(true);
 			
 			polylines.push_back( p );
@@ -173,7 +177,7 @@ namespace ciCSG
 				}
 			}
 			
-			t.classification = intersectionCount % 2 ? ofxCSG::BACK : ofxCSG::FRONT;
+			t.classification = intersectionCount % 2 ? ciCSG::BACK : ciCSG::FRONT;
 		}
 	}
 	
