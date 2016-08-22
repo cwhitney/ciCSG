@@ -17,8 +17,6 @@ class BasicSampleApp : public App {
 	void update() override;
 	void draw() override;
 
-	void updateMesh();
-
 	//ofMesh m0, m1, mesh, otherMesh;
 
 	ci::TriMeshRef m0, m1, mesh, otherMesh;
@@ -32,9 +30,9 @@ class BasicSampleApp : public App {
 	ci::gl::BatchRef	b0, b1, resultBatch;
 	int intersectType = 0;
 
-	bool bShowResult = false;
+	bool bShowResult = true;
 
-	ci::gl::GlslProgRef		mShader;
+	ci::gl::GlslProgRef		mPhong;
 };
 
 void BasicSampleApp::setup()
@@ -44,60 +42,56 @@ void BasicSampleApp::setup()
 	mCamUi.connect(getWindow());
 	mCamUi.enable();
 
-	mShader = gl::getStockShader(gl::ShaderDef().color());
+	//mPhong = gl::GlslProg::create(loadAsset("phong.vert"), loadAsset("phong.frag"));
+	mPhong = gl::getStockShader(gl::ShaderDef().color());
 
-	// Use one cinder native object, and load one model to mesh together
-	m0 = TriMesh::create( geom::Teapot().subdivisions(16) >> geom::Scale(10.0) );
+	ObjLoader loader0( loadAsset("box0.obj") );
+	m0 = TriMesh::create(loader0);
 
 	ObjLoader loader1(loadAsset("box1.obj"));
 	m1 = TriMesh::create(loader1);
 
-	if (!loader1.getAvailableAttribs().count(geom::NORMAL)) {
-		m1->recalculateNormals();
-	}
+	//if (!loader0.getAvailableAttribs().count(geom::NORMAL)) {
+		m0->recalculateNormals();
+	//}
 
-	b0 = gl::Batch::create(*m0 , mShader);
-	b1 = gl::Batch::create(*m1, mShader);
+	//if (!loader1.getAvailableAttribs().count(geom::NORMAL)) {
+		m1->recalculateNormals();
+	//}
+
+	b0 = gl::Batch::create(*m0, mPhong);
+	b1 = gl::Batch::create(*m1, mPhong);
 
 	mesh = TriMesh::create();
-	//updateMesh();
 
 	gl::enableDepth();
 }
 
 void BasicSampleApp::keyDown(KeyEvent event )
 {
+
 	if (event.getChar() == ' ') {
 		bShowResult = !bShowResult;
-		//updateMesh();
 	}else if (event.getChar() == '1') {
 		intersectType = 0;
-		updateMesh();
 	}else if (event.getChar() == '2') {
 		intersectType = 1;
-		updateMesh();
 	}else if (event.getChar() == '3') {
 		intersectType = 2;
-		updateMesh();
 	}
-}
-
-void BasicSampleApp::updateMesh()
-{
-	if (intersectType == 0) { ciCSG::meshUnion(m0, m1, mesh); }
-	else if (intersectType == 1) { ciCSG::meshDifference(m0, m1, mesh); }
-	else if (intersectType == 2) { ciCSG::meshIntersection(m0, m1, mesh); }
-
-	resultBatch = gl::Batch::create(*mesh, mShader);
 }
 
 void BasicSampleApp::update()
 {
-	// Uncomment to move mesh around each frame
-	/*
+	//ci::TriMeshRef mesh0 = m0, mesh1 = m1;
+
 	glm::mat4 transform;
-	transform = glm::translate(transform, vec3(sin(getElapsedSeconds()) * 10, 0, 0));
-	transform = glm::rotate(transform, 0.1f, vec3(0.0, 0.1f, 1.0f));
+
+	//transform = glm::translate(transform, vec3(sin(getElapsedSeconds()) * 10, 0, 0));
+	//transform = glm::rotate(transform, 0.1f, vec3(0.0, 0.1f, 1.0f));
+
+	//transform.translate( sin(getElapsedSeconds()) * 10, 0, 0);
+	//transform.rotate( getElapsedSeconds() * 10, 0, .1, 1);
 
 	vec3 *vertices = m1->getPositions<3>();
 	size_t numVert = m1->getNumVertices();
@@ -110,9 +104,16 @@ void BasicSampleApp::update()
 		vertices++;
 	}
 
-	b1 = gl::Batch::create(*m1, mShader);
-	updateMesh();
-	//*/
+	b1 = gl::Batch::create(*m1, mPhong);
+	
+
+	if( intersectType == 0) ciCSG::meshUnion(m0, m1, mesh);
+	else if (intersectType == 1) ciCSG::meshDifference(m0, m1, mesh);
+	else if (intersectType == 2) ciCSG::meshIntersection(m0, m1, mesh);
+
+	mesh->recalculateNormals();
+
+	resultBatch = gl::Batch::create(*mesh, mPhong);
 }
 
 void BasicSampleApp::draw()
@@ -139,17 +140,17 @@ void BasicSampleApp::draw()
 		b1->draw();
 	}
 
-	if(bShowResult && resultBatch){
+	if(bShowResult){
 		gl::disableWireframe();
 		gl::color(1, 0, 1);
 		resultBatch->draw();
+
+		//gl::ScopedDepth scD(false);
 
 		gl::enableWireframe();
 		gl::color(0, 0, 0);
 		resultBatch->draw();
 	}
-
-	gl::drawString("Space to toggle between mesh and boolean operations", vec2(10,10) );
 }
 
 CINDER_APP(BasicSampleApp, RendererGl, [&](App::Settings *settings) {
