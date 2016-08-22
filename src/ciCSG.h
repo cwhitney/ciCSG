@@ -14,7 +14,7 @@
 
 namespace ciCSG
 {
-	static void addPolygonsToMesh(ci::TriMesh& m, vector<ciCSG::Polygon>& polygons)
+	static void addPolygonsToMesh(ci::TriMeshRef m, vector<ciCSG::Polygon>& polygons)
 	{
 		for(auto& p: polygons)
 		{
@@ -25,22 +25,22 @@ namespace ciCSG
 					//m.addVertex( t.a );
 					//m.addVertex( t.b );
 					//m.addVertex( t.c );
-					m.appendPosition(t.a);
-					m.appendPosition(t.b);
-					m.appendPosition(t.c);
+					m->appendPosition(t.a);
+					m->appendPosition(t.b);
+					m->appendPosition(t.c);
 				}
 			}
 		}
 	}
 	
-	static vector<ciCSG::Polygon> meshToPolygons(ci::TriMesh& m)
+	static vector<ciCSG::Polygon> meshToPolygons(ci::TriMeshRef m)
 	{
 		vector<ciCSG::Polygon> polygons;
 		
-		auto indices = m.getIndices();
+		auto indices = m->getIndices();
 		//auto v = m.getVertices();
-		auto v = m.getPositions<3>();
-		size_t numPos = m.getNumVertices();
+		auto v = m->getPositions<3>();
+		size_t numPos = m->getNumVertices();
 		
 		if(indices.size())
 		{
@@ -75,7 +75,7 @@ namespace ciCSG
 	}
 	
 	
-	static void meshBoolean( ci::TriMesh& a, ci::TriMesh& b, ci::TriMesh& m, bool flipA, bool flipB)
+	static void meshBoolean( ci::TriMeshRef a, ci::TriMeshRef b, ci::TriMeshRef m, bool flipA, bool flipB)
 	{
 		
 		// get our polygons
@@ -129,7 +129,7 @@ namespace ciCSG
 		
 		CI_LOG_I( "ciCSG::meshBoolean", "split time: " + to_string((getElapsedSeconds() - startTime)) );
 		
-		//classy the triangles
+		// classy the triangles
 		startTime = ci::app::getElapsedSeconds();
 		ci::vec3 rayDir(0,1,0);
 
@@ -158,7 +158,7 @@ namespace ciCSG
 		}
 		CI_LOG_I( "ciCSG::meshBoolean", "classify time: " + to_string((ci::app::getElapsedSeconds() - startTime)) );
 		
-		//flip em
+		// flip em
 		if(flipA == true) {
 			for(auto& p: polygonsA)	p.flip();
 		}
@@ -169,23 +169,23 @@ namespace ciCSG
 		
 		startTime = ci::app::getElapsedSeconds();
 		//add the polygons to out outMesh
-		m.clear();
+		m->clear();
 		addPolygonsToMesh( m, polygonsA );
 		addPolygonsToMesh( m, polygonsB );
 		CI_LOG_I( "ciCSG::meshBoolean", "create mesh time: " + to_string((ci::app::getElapsedSeconds() - startTime)) );
 	}
 	
-	static void meshUnion( ci::TriMesh& a, ci::TriMesh& b, ci::TriMesh& outMesh )
+	static void meshUnion( ci::TriMeshRef a, ci::TriMeshRef b, ci::TriMeshRef outMesh )
 	{
 		meshBoolean( a, b, outMesh, false, false );
 	}
 	
-	static void meshIntersection(ci::TriMesh& a, ci::TriMesh& b, ci::TriMesh& outMesh )
+	static void meshIntersection(ci::TriMeshRef a, ci::TriMeshRef b, ci::TriMeshRef outMesh )
 	{
 		meshBoolean( a, b, outMesh, true, true );
 	}
 	
-	static void meshDifference(ci::TriMesh& a, ci::TriMesh& b, ci::TriMesh& outMesh )
+	static void meshDifference(ci::TriMeshRef a, ci::TriMeshRef b, ci::TriMeshRef outMesh )
 	{
 		meshBoolean( a, b, outMesh, false, true );
 	}

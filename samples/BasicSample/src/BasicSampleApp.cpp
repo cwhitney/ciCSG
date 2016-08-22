@@ -13,14 +13,13 @@ using namespace std;
 class BasicSampleApp : public App {
   public:
 	void setup() override;
-	void mouseDown( MouseEvent event ) override;
+	void keyDown( KeyEvent event ) override;
 	void update() override;
 	void draw() override;
 
 	//ofMesh m0, m1, mesh, otherMesh;
 
 	ci::TriMeshRef m0, m1, mesh, otherMesh;
-	ci::TriMesh	resultMesh;
 
 	//ciCSG::Polygon cp0, cp1;
 	vector<vec3> intersectionPoints;
@@ -28,7 +27,10 @@ class BasicSampleApp : public App {
 	ci::CameraPersp	mCam;
 	CameraUi	mCamUi;
 
-	ci::gl::BatchRef	b0, b1;
+	ci::gl::BatchRef	b0, b1, resultBatch;
+	int intersectType = 0;
+
+	bool bShowResult = true;
 };
 
 void BasicSampleApp::setup()
@@ -55,12 +57,23 @@ void BasicSampleApp::setup()
 	b0 = gl::Batch::create(*m0, gl::getStockShader(gl::ShaderDef().color()));
 	b1 = gl::Batch::create(*m1, gl::getStockShader(gl::ShaderDef().color()));
 
+	mesh = TriMesh::create();
+
 	gl::enableDepth();
-	//mBatch = gl::Batch::create(*mMesh, mGlsl);
 }
 
-void BasicSampleApp::mouseDown( MouseEvent event )
+void BasicSampleApp::keyDown(KeyEvent event )
 {
+
+	if (event.getChar() == ' ') {
+		bShowResult = !bShowResult;
+	}else if (event.getChar() == '1') {
+		intersectType = 0;
+	}else if (event.getChar() == '2') {
+		intersectType = 1;
+	}else if (event.getChar() == '3') {
+		intersectType = 2;
+	}
 }
 
 void BasicSampleApp::update()
@@ -69,27 +82,31 @@ void BasicSampleApp::update()
 
 	glm::mat4 transform;
 
-	glm::translate(transform, vec3(sin(getElapsedSeconds()) * 10, 0, 0));
-	glm::rotate(transform, (float)getElapsedSeconds() * 10.0f, vec3(1.0, 0.1f, 1.0f));
+	//transform = glm::translate(transform, vec3(sin(getElapsedSeconds()) * 10, 0, 0));
+	//transform = glm::rotate(transform, 0.1f, vec3(0.0, 0.1f, 1.0f));
 
 	//transform.translate( sin(getElapsedSeconds()) * 10, 0, 0);
 	//transform.rotate( getElapsedSeconds() * 10, 0, .1, 1);
-	
-/*
+
 	vec3 *vertices = m1->getPositions<3>();
 	size_t numVert = m1->getNumVertices();
 
 	for (int i=0; i<numVert; ++i)
 	{
 		vec4 v4(*vertices, 1.0);
-		*vertices = vec3(v4 * transform);
+		vec3 newPos = vec3(v4 * transform);
+		*vertices = newPos;
 		vertices++;
 	}
 
 	b1 = gl::Batch::create(*m1, gl::getStockShader(gl::ShaderDef().color()));
-	*/
+	
 
-	ciCSG::meshUnion(*m0, *m1, resultMesh);
+	if( intersectType == 0) ciCSG::meshUnion(m0, m1, mesh);
+	else if (intersectType == 1) ciCSG::meshDifference(m0, m1, mesh);
+	else if (intersectType == 2) ciCSG::meshIntersection(m0, m1, mesh);
+
+	resultBatch = gl::Batch::create(*mesh, gl::getStockShader(gl::ShaderDef().color()));
 }
 
 void BasicSampleApp::draw()
@@ -99,7 +116,7 @@ void BasicSampleApp::draw()
 	gl::ScopedMatrices scMat;
 	gl::setMatrices(mCam);
 
-	{
+	if(!bShowResult){
 		gl::disableWireframe();
 
 		gl::color(1, 0, 1);
@@ -107,13 +124,22 @@ void BasicSampleApp::draw()
 
 		gl::color(0, 1, 1);
 		b1->draw();
-	}
-	{
+
 		gl::enableWireframe();
 
 		gl::color(0, 0, 0);
 		b0->draw();
 		b1->draw();
+	}
+
+	if(bShowResult){
+		gl::disableWireframe();
+		gl::color(1, 0, 1);
+		resultBatch->draw();
+
+		gl::enableWireframe();
+		gl::color(0, 0, 0);
+		resultBatch->draw();
 	}
 }
 

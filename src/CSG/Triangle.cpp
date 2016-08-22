@@ -410,14 +410,14 @@ namespace ciCSG
 		return triangles;
 	}
 	
-	vector<Triangle> Triangle::meshToTriangles(TriMesh& m)
+	vector<Triangle> Triangle::meshToTriangles(TriMeshRef m)
 	{
 		vector<Triangle> triangles;
 
-		auto indices = m.getIndices();
+		auto indices = m->getIndices();
 		//auto v = m.getVertices();
-		auto v = m.getPositions<3>();
-		size_t numPos = m.getNumVertices();
+		auto v = m->getPositions<3>();
+		size_t numPos = m->getNumVertices();
 
 		if(indices.size())
 		{

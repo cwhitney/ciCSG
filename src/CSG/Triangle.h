@@ -66,7 +66,7 @@ namespace ciCSG
 		
 		std::vector<Triangle> split( Triangle t );
 		
-		std::vector<Triangle> meshToTriangles(ci::TriMesh& m);
+		std::vector<Triangle> meshToTriangles(ci::TriMeshRef m);
 		
 		ci::vec3 a, b, c, centroid;
 		ci::vec3 normal;
@@ -76,13 +76,13 @@ namespace ciCSG
 	
 	
 	//STATIC METHODS
-	static std::vector<Triangle> meshToTriangles(ci::TriMesh& m)
+	static std::vector<Triangle> meshToTriangles(ci::TriMeshRef m)
 	{
 		vector<Triangle> triangles;
 		
-		auto indices = m.getIndices();
-		auto v = m.getPositions<3>();
-		size_t numPos = m.getNumVertices();
+		auto indices = m->getIndices();
+		auto v = m->getPositions<3>();
+		size_t numPos = m->getNumVertices();
 		
 		if(indices.size())
 		{
