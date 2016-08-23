@@ -10,8 +10,8 @@
 #include "cinder/Vector.h"
 #include "cinder/PolyLine.h"
 
-#include <Triangle.h>
-#include <BoundBox.h>
+#include "Triangle.h"
+#include "BoundBox.h"
 
 namespace ciCSG
 {

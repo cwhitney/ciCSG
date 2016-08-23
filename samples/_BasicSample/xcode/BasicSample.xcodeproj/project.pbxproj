@@ -18,10 +18,21 @@
 		00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		DD92FA17B68242B799953958 /* BasicSample_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = F01B149F7E1D4D5D87DF258E /* BasicSample_Prefix.pch */; };
-		E748A7A6BC64416BA5B46B08 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 98F85AA7894E49958EED489E /* CinderApp.icns */; };
-		D4F5BE72F74F4224BDF52167 /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CAA8E772D8F49CFA2FB7422 /* Resources.h */; };
-		455B13613A024EBD9790C882 /* BasicSampleApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 333F05738BEB42F5B22E1132 /* BasicSampleApp.cpp */; };
+		4A7B16A1CD8E409FB206875C /* Triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B33E2426319949AFAB425892 /* Triangle.cpp */; };
+		2FF8ED3AFD9E4A8B998EFD2C /* Polygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 211DBA651778479FA5D8F47F /* Polygon.cpp */; };
+		F725B31369644D339351A640 /* LineSegment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC86BD8DEAB54F41B4F2ECEE /* LineSegment.cpp */; };
+		1E93C8FC3582426C9AE6F2C2 /* BoundBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 879DC924A055408FA5702E3C /* BoundBox.cpp */; };
+		5E9E6D5B13DE41B398943BAF /* Vertex.h in Headers */ = {isa = PBXBuildFile; fileRef = 000933AC0D7C42FBA93E1B82 /* Vertex.h */; };
+		03B27ED3BAB4496E9B7A7B8C /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = E5E5B9722BB5458C9C21DFFA /* Utils.h */; };
+		56BBA826DF704B8CA6174C52 /* Triangle.h in Headers */ = {isa = PBXBuildFile; fileRef = E65EE3C68DC94098ADD76B09 /* Triangle.h */; };
+		EC8558084C3A416C9646EE98 /* Polygon.h in Headers */ = {isa = PBXBuildFile; fileRef = CCCDB8C3AE0D4341A3D05399 /* Polygon.h */; };
+		C46B575FC8404BE2AE2B2E28 /* LineSegment.h in Headers */ = {isa = PBXBuildFile; fileRef = BBC806B148C646A6A42E6A8C /* LineSegment.h */; };
+		E9A1249F99D2424087C52A44 /* BoundBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BFB16789F654ECA9936F141 /* BoundBox.h */; };
+		1686C55ADBDB435B8822AFD2 /* ciCSG.h in Headers */ = {isa = PBXBuildFile; fileRef = 393C15BB0FB04B9FBC116245 /* ciCSG.h */; };
+		CF23F736722D4DF09DB88004 /* BasicSample_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 8B82D14E702A418496EE8A15 /* BasicSample_Prefix.pch */; };
+		E11DC083FF4F49BE907AA80A /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 33261443B4374C98AE2A87ED /* CinderApp.icns */; };
+		606A6B23008A46EDA19707A2 /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = 211CD34B5AA14BC6AB4ED6D8 /* Resources.h */; };
+		0B85E156FA134F749A9148CC /* BasicSampleApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 537200EC40884795B6A277E4 /* BasicSampleApp.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,11 +50,22 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		8D1107320486CEB800E47090 /* BasicSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasicSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		333F05738BEB42F5B22E1132 /* BasicSampleApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../src/BasicSampleApp.cpp; sourceTree = "<group>"; name = BasicSampleApp.cpp; };
-		0CAA8E772D8F49CFA2FB7422 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../include/Resources.h; sourceTree = "<group>"; name = Resources.h; };
-		98F85AA7894E49958EED489E /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; name = CinderApp.icns; };
-		7524D743415847BC9339ACAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; name = Info.plist; };
-		F01B149F7E1D4D5D87DF258E /* BasicSample_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = BasicSample_Prefix.pch; sourceTree = "<group>"; name = BasicSample_Prefix.pch; };
+		537200EC40884795B6A277E4 /* BasicSampleApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../src/BasicSampleApp.cpp; sourceTree = "<group>"; name = BasicSampleApp.cpp; };
+		211CD34B5AA14BC6AB4ED6D8 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../include/Resources.h; sourceTree = "<group>"; name = Resources.h; };
+		33261443B4374C98AE2A87ED /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; name = CinderApp.icns; };
+		C4E5FF0B4E4D4CBABB655757 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; name = Info.plist; };
+		8B82D14E702A418496EE8A15 /* BasicSample_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = BasicSample_Prefix.pch; sourceTree = "<group>"; name = BasicSample_Prefix.pch; };
+		393C15BB0FB04B9FBC116245 /* ciCSG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../../../src/ciCSG.h; sourceTree = "<group>"; name = ciCSG.h; };
+		4BFB16789F654ECA9936F141 /* BoundBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../../../src/CSG/BoundBox.h; sourceTree = "<group>"; name = BoundBox.h; };
+		BBC806B148C646A6A42E6A8C /* LineSegment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../../../src/CSG/LineSegment.h; sourceTree = "<group>"; name = LineSegment.h; };
+		CCCDB8C3AE0D4341A3D05399 /* Polygon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../../../src/CSG/Polygon.h; sourceTree = "<group>"; name = Polygon.h; };
+		E65EE3C68DC94098ADD76B09 /* Triangle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../../../src/CSG/Triangle.h; sourceTree = "<group>"; name = Triangle.h; };
+		E5E5B9722BB5458C9C21DFFA /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../../../src/CSG/Utils.h; sourceTree = "<group>"; name = Utils.h; };
+		000933AC0D7C42FBA93E1B82 /* Vertex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../../../src/CSG/Vertex.h; sourceTree = "<group>"; name = Vertex.h; };
+		879DC924A055408FA5702E3C /* BoundBox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../../../src/CSG/BoundBox.cpp; sourceTree = "<group>"; name = BoundBox.cpp; };
+		DC86BD8DEAB54F41B4F2ECEE /* LineSegment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../../../src/CSG/LineSegment.cpp; sourceTree = "<group>"; name = LineSegment.cpp; };
+		211DBA651778479FA5D8F47F /* Polygon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../../../src/CSG/Polygon.cpp; sourceTree = "<group>"; name = Polygon.cpp; };
+		B33E2426319949AFAB425892 /* Triangle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../../../src/CSG/Triangle.cpp; sourceTree = "<group>"; name = Triangle.cpp; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +93,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				333F05738BEB42F5B22E1132 /* BasicSampleApp.cpp */,
+				537200EC40884795B6A277E4 /* BasicSampleApp.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -124,9 +146,44 @@
 			name = BasicSample;
 			sourceTree = "<group>";
 		};
+		B0020B65B73744808C49F6D3 /* CSG */ = {
+			isa = PBXGroup;
+			children = (
+				4BFB16789F654ECA9936F141 /* BoundBox.h */,
+				BBC806B148C646A6A42E6A8C /* LineSegment.h */,
+				CCCDB8C3AE0D4341A3D05399 /* Polygon.h */,
+				E65EE3C68DC94098ADD76B09 /* Triangle.h */,
+				E5E5B9722BB5458C9C21DFFA /* Utils.h */,
+				000933AC0D7C42FBA93E1B82 /* Vertex.h */,
+				879DC924A055408FA5702E3C /* BoundBox.cpp */,
+				DC86BD8DEAB54F41B4F2ECEE /* LineSegment.cpp */,
+				211DBA651778479FA5D8F47F /* Polygon.cpp */,
+				B33E2426319949AFAB425892 /* Triangle.cpp */,
+			);
+			name = CSG;
+			sourceTree = "<group>";
+		};
+		A040FF6E30A34A78A2DC2888 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				393C15BB0FB04B9FBC116245 /* ciCSG.h */,
+				B0020B65B73744808C49F6D3 /* CSG */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		3E4DC04C354243A883559F23 /* ciCSG */ = {
+			isa = PBXGroup;
+			children = (
+				A040FF6E30A34A78A2DC2888 /* src */,
+			);
+			name = ciCSG;
+			sourceTree = "<group>";
+		};
 		01B97315FEAEA392516A2CEA /* Blocks */ = {
 			isa = PBXGroup;
 			children = (
+				3E4DC04C354243A883559F23 /* ciCSG */,
 			);
 			name = Blocks;
 			sourceTree = "<group>";
@@ -134,8 +191,8 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				0CAA8E772D8F49CFA2FB7422 /* Resources.h */,
-				F01B149F7E1D4D5D87DF258E /* BasicSample_Prefix.pch */,
+				211CD34B5AA14BC6AB4ED6D8 /* Resources.h */,
+				8B82D14E702A418496EE8A15 /* BasicSample_Prefix.pch */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -143,8 +200,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				98F85AA7894E49958EED489E /* CinderApp.icns */,
-				7524D743415847BC9339ACAD /* Info.plist */,
+				33261443B4374C98AE2A87ED /* CinderApp.icns */,
+				C4E5FF0B4E4D4CBABB655757 /* Info.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -208,7 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E748A7A6BC64416BA5B46B08 /* CinderApp.icns in Resources */,
+				E11DC083FF4F49BE907AA80A /* CinderApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,7 +276,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				455B13613A024EBD9790C882 /* BasicSampleApp.cpp in Sources */,
+				0B85E156FA134F749A9148CC /* BasicSampleApp.cpp in Sources */,
+				1E93C8FC3582426C9AE6F2C2 /* BoundBox.cpp in Sources */,
+				F725B31369644D339351A640 /* LineSegment.cpp in Sources */,
+				2FF8ED3AFD9E4A8B998EFD2C /* Polygon.cpp in Sources */,
+				4A7B16A1CD8E409FB206875C /* Triangle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,7 +355,11 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
+				USER_HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/include\" ../include",
+					../../../src,
+					../../../src/CSG,
+				);
 			};
 			name = Debug;
 		};
@@ -310,7 +375,11 @@
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
+				USER_HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/include\" ../include",
+					../../../src,
+					../../../src/CSG,
+				);
 			};
 			name = Release;
 		};

@@ -10,7 +10,7 @@
 #include "cinder/Log.h"
 #include "cinder/PolyLine.h"
 
-#include <CSG/Polygon.h>
+#include "CSG/Polygon.h"
 
 namespace ciCSG
 {

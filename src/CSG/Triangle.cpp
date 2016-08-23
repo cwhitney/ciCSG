@@ -6,7 +6,7 @@
 //
 //
 
-#include <Triangle.h>
+#include "Triangle.h"
 
 using namespace ci;
 using namespace std;

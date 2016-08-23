@@ -11,7 +11,7 @@
 #include "cinder/PolyLine.h"
 #include "cinder/TriMesh.h"
 
-#include <LineSegment.h>
+#include "LineSegment.h"
 #include <vector>
 
 namespace ciCSG
