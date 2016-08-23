@@ -22,9 +22,6 @@ namespace ciCSG
 			{
 				if(t.classification == FRONT)
 				{
-					//m.addVertex( t.a );
-					//m.addVertex( t.b );
-					//m.addVertex( t.c );
 					m->appendPosition(t.a);
 					m->appendPosition(t.b);
 					m->appendPosition(t.c);
@@ -38,7 +35,6 @@ namespace ciCSG
 		vector<ciCSG::Polygon> polygons;
 		
 		auto indices = m->getIndices();
-		//auto v = m.getVertices();
 		auto v = m->getPositions<3>();
 		size_t numPos = m->getNumVertices();
 		
@@ -127,7 +123,7 @@ namespace ciCSG
 			pb.wasSplit = pb.triangles.size() > 1;
 		}
 		
-		CI_LOG_I( "ciCSG::meshBoolean", "split time: " + to_string((getElapsedSeconds() - startTime)) );
+		CI_LOG_I( "ciCSG::meshBoolean :: split time: ") << to_string(ci::app::getElapsedSeconds() - startTime);
 		
 		// classy the triangles
 		startTime = ci::app::getElapsedSeconds();
@@ -156,7 +152,7 @@ namespace ciCSG
 				p.setClassification( p.rayIntersectionCount % 2 ? BACK : FRONT );
 			}
 		}
-		CI_LOG_I( "ciCSG::meshBoolean", "classify time: " + to_string((ci::app::getElapsedSeconds() - startTime)) );
+		CI_LOG_I( "ciCSG::meshBoolean :: classify time: ") << to_string(ci::app::getElapsedSeconds() - startTime);
 		
 		// flip em
 		if(flipA == true) {
@@ -168,11 +164,12 @@ namespace ciCSG
 		}
 		
 		startTime = ci::app::getElapsedSeconds();
-		//add the polygons to out outMesh
+
+		// add the polygons to out outMesh
 		m->clear();
 		addPolygonsToMesh( m, polygonsA );
 		addPolygonsToMesh( m, polygonsB );
-		CI_LOG_I( "ciCSG::meshBoolean", "create mesh time: " + to_string((ci::app::getElapsedSeconds() - startTime)) );
+		CI_LOG_I( "ciCSG::meshBoolean create mesh time: ") << to_string(ci::app::getElapsedSeconds() - startTime);
 	}
 	
 	static void meshUnion( ci::TriMeshRef a, ci::TriMeshRef b, ci::TriMeshRef outMesh )
