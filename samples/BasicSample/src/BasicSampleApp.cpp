@@ -37,7 +37,7 @@ class BasicSampleApp : public App {
 void BasicSampleApp::setup()
 {
 	mGui = params::InterfaceGl::create("ciCSG", vec2(200, 400));
-	vector<string> mGeomTypeList = { "Cube", "Sphere", "Teapot" };
+	vector<string> mGeomTypeList = { "Cube", "Sphere", "Teapot", "Torus", "TorusKnot", "Cone" };
 	vector<string> mBooleanTypeList = { "Union", "Difference", "Intersection" };
 
 	mGui->addParam("Geometry", mGeomTypeList, &mGeomType)
@@ -45,9 +45,15 @@ void BasicSampleApp::setup()
 		if (mGeomType == 0) {
 			m0 = TriMesh::create(geom::Cube() >> geom::Scale(10.0));
 		}else if (mGeomType == 1) {
-			m0 = TriMesh::create(geom::Sphere().subdivisions(16) >> geom::Scale(10.0));
+			m0 = TriMesh::create(geom::Sphere().subdivisions(8) >> geom::Scale(10.0));
 		}else if (mGeomType == 2) {
 			m0 = TriMesh::create(geom::Teapot().subdivisions(4) >> geom::Scale(10.0));
+		}else if (mGeomType == 3) {
+			m0 = TriMesh::create(geom::Torus() >> geom::Scale(8.0));
+		}else if (mGeomType == 4) {
+			m0 = TriMesh::create(geom::TorusKnot() >> geom::Scale(5.0));
+		}else if (mGeomType == 5) {
+			m0 = TriMesh::create(geom::Cone() >> geom::Scale(7.0));
 		}
 
 		b0 = gl::Batch::create(*m0, mShader);
