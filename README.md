@@ -24,4 +24,4 @@ ciCSG::meshIntersection(m0, m1, resultMesh);
 
 For more in depth information check out [ofxCSG](https://github.com/larsberg/ofxCSG).
 
-![ciCSG Screenshot](https://raw.githubusercontent.com/cwhitney/ciCSG/master/sample.png)
+![ciCSG Screenshot](sample.png)
